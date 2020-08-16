@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b1c1f74b3f3ba43bb888531a9388bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  font_texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+  font_texture: {fileID: 2800000, guid: 2c44b70487211cf40bbcbe7e376cef77, type: 3}
 --- !u!4 &599619243
 Transform:
   m_ObjectHideFlags: 0

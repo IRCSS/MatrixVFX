@@ -24,7 +24,7 @@ public class ScreenSpaceMatrix : MonoBehaviour {
         if (!mat) Debug.LogError("Couldnt find the shader ScreenSpaceMatrixEffect");
 
         mat.SetTexture("_font_texture", font_texture);
-
+        mat.SetInt("_session_rand_seed", Random.Range(0, int.MaxValue));
         cb = new CommandBuffer()
         {
             name = "ScreenSpaceMatrixPass",
@@ -36,6 +36,8 @@ public class ScreenSpaceMatrix : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+        mat.SetInt("_session_rand_seed", Random.Range(0, int.MaxValue));
+
+    }
 }
