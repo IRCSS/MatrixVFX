@@ -57,13 +57,27 @@
 					   uv.x  = -uv.x;
 			    return tex2D(_font_texture, uv).r;
 			}
+			//---------------------------------------------------------
+
+			float3 rain(float2 fragCoord)
+			{
+				fragCoord.x -= fmod(fragCoord.x, 16.);
+
+				float offset = sin(fragCoord.x*15.);
+				float speed  = cos(fragCoord.x*3.)*.3 + .7;
+
+				float y = frac(fragCoord.y / _screen_height + _Time.y * speed + offset);
+				return float3(.1, 1., .35) / (y*20.);
+			}
+
+			//---------------------------------------------------------
 
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture
 				fixed4 col = tex2D(_font_texture, i.uv);
-			       col.xyz = float3(text(i.uv * float2(_screen_width, _screen_height)*0.6), 0., 0.);
-				return col.xxxx;
+			       col.xyz = text(i.uv * float2(_screen_width, _screen_height)*0.6)*rain(i.uv * float2(_screen_width, _screen_height)*0.6);
+				return col;
 			}
 			ENDCG
 		}
