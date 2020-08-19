@@ -31,12 +31,13 @@ uint                _session_rand_seed;
 
 #define image_dimension 512
 
-[numthreads(8,8,1)] // 512 in 512 image. 
+[numthreads(8,8,1)] // 16 in 16 image. 
 void Generate_White_Noise(uint3 id : SV_DispatchThreadID)
 {
 
 	uint  pixel_unique_id     = id.x + id.y * image_dimension;
-	float rand                = rnd(pixel_unique_id, 1);
-	      _white_noise[id.xy] = float4(rand, rand, rand, 0.0);
+	float rand_x              = rnd(pixel_unique_id, 1);
+	float rand_y              = rnd(pixel_unique_id, 861);
+	      _white_noise[id.xy] = float4(rand_x, rand_y, 0.0, 0.0);
 
 }

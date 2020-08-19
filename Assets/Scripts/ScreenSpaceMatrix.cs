@@ -57,7 +57,7 @@ public class ScreenSpaceMatrix : MonoBehaviour {
 
         cb.DispatchCompute(white_noise_generator, 0, 512 / 8, 512 / 8, 1);
         cb.Blit(BuiltinRenderTextureType.None, BuiltinRenderTextureType.CameraTarget, mat);
-       // cb.Blit(white_noise, BuiltinRenderTextureType.CameraTarget);
+        //cb.Blit(white_noise, BuiltinRenderTextureType.CameraTarget);
         cam.AddCommandBuffer(CameraEvent.AfterEverything, cb);
     } 
 	
