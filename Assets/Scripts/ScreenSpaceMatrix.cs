@@ -40,14 +40,14 @@ public class ScreenSpaceMatrix : MonoBehaviour {
 
         // -----------------------------------------
 
-        mat = new Material(Shader.Find("Unlit/ScreenSpaceMatrixEffect"));
+        mat = new Material(Shader.Find("Unlit/ScreenSpaceMatrixEffectColored"));
         if (!mat) Debug.LogError("Couldnt find the shader ScreenSpaceMatrixEffect");
 
-        mat.SetTexture("_font_texture",   font_texture);
-        mat.SetTexture("_white_noise",    white_noise);
-        mat.SetInt    ("_screen_width",   cam.pixelWidth);
-        mat.SetInt    ("_screen_height",  cam.pixelHeight);
-
+        mat.SetTexture("_font_texture",      font_texture);
+        mat.SetTexture("_white_noise",       white_noise);
+        mat.SetInt    ("_screen_width",      cam.pixelWidth);
+        mat.SetInt    ("_screen_height",     cam.pixelHeight);
+        mat.SetInt    ("_session_rand_seed", Random.Range(0, int.MaxValue));
         // -----------------------------------------
 
         cb = new CommandBuffer()
@@ -63,7 +63,7 @@ public class ScreenSpaceMatrix : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-      white_noise_generator.SetInt("_session_rand_seed", Mathf.CeilToInt( Time.time *4.0f));
+      white_noise_generator.SetInt("_session_rand_seed", Mathf.CeilToInt( Time.time *6.0f));
 
     }
 }

@@ -1,4 +1,4 @@
-﻿Shader "Unlit/ScreenSpaceMatrixEffect"
+﻿Shader "Unlit/ScreenSpaceMatrixEffectColored"
 {
 	SubShader
 	{
@@ -61,25 +61,39 @@
 			}
 			//---------------------------------------------------------
 
+			uint _session_rand_seed; // required by the RandomLi Include
+#include "RandomLib.cginc"
+#include "LabColorspace.cginc"
 			float3 rain(float2 fragCoord)
 			{
-				fragCoord.x = floor(fragCoord.x/ 16.);              // This is the exact replica of the calculation in text function for getting the cell ids. Here we want the id for the columns 
+				fragCoord.x  = floor(fragCoord.x/ 16.);              // This is the exact replica of the calculation in text function for getting the cell ids. Here we want the id for the columns 
 
-				float offset = sin (fragCoord.x*15.);               // Each drop of rain needs to start at a different point. The column id  plus a sin is used to generate a different offset for each columm
-				float speed  = cos (fragCoord.x*3.)*.15 + .35;      // Same as above, but for speed. Since we dont want the columns travelling up, we are adding the 0.7. Since the cos *0.3 goes between -0.3 and 0.3 the 0.7 ensures that the speed goes between 0.4 mad 1.0. This is also control parameters for min and max speed
+				float offset = rnd (fragCoord.x*521., 612);               // Each drop of rain needs to start at a different point. The column id  plus a sin is used to generate a different offset for each columm
+				float speed  = rnd (fragCoord.x*612., 951)*.15 + .35;      // Same as above, but for speed. Since we dont want the columns travelling up, we are adding the 0.7. Since the cos *0.3 goes between -0.3 and 0.3 the 0.7 ensures that the speed goes between 0.4 mad 1.0. This is also control parameters for min and max speed
+				      speed *= 0.4;
 				float y      = frac((fragCoord.y / _screen_height)  // This maps the screen again so that top is 1 and button is 0. The addition with time and frac would cause an entire bar moving from button to top
 					                + _Time.y * speed + offset);    // the speed and offset would cause the columns to move down at different speeds. Which causes the rain drop effect
+				
 
-				return float3(.1, 1., .35) / (y*20.);               // adjusting the retun color based on the columns calculations. 
+				int    randomSeed = (fragCoord.x +
+					                floor((fragCoord.y / _screen_height) + _Time.y * speed + offset)*200.)
+									*551.;
+				float3 col = float3(0.8,
+					                rnd(randomSeed, 712), 
+					                rnd(randomSeed, 61));
+				       col = lab2rgb(col);
+				return col / (y*20.);                               // adjusting the retun color based on the columns calculations. 
 			}
 
 			//---------------------------------------------------------
-
+#define scale 0.25
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture
 				fixed4 col = float4(0.,0.,0.,1.);
-			       col.xyz = text(i.uv * float2(_screen_width, _screen_height)*0.6)*rain(i.uv * float2(_screen_width, _screen_height)*0.6);
+
+			       col.xyz = text(i.uv * float2(_screen_width, _screen_height)*scale)*
+					         rain(i.uv * float2(_screen_width, _screen_height)*scale);
 				return col;
 			}
 			ENDCG
