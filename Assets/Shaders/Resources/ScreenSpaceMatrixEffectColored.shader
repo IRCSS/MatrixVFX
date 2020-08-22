@@ -77,8 +77,8 @@
 
 				int    randomSeed = (fragCoord.x +
 					                floor((fragCoord.y / _screen_height) + _Time.y * speed + offset)*200.)
-									*551.;
-				float3 col = float3(0.8,
+									*5551.;
+				float3 col = float3(rnd(randomSeed, 21),
 					                rnd(randomSeed, 712), 
 					                rnd(randomSeed, 61));
 				       col = lab2rgb(col);
@@ -86,7 +86,7 @@
 			}
 
 			//---------------------------------------------------------
-#define scale 0.25
+#define scale 0.6
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture

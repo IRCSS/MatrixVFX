@@ -286,6 +286,7 @@ MonoBehaviour:
   font_texture: {fileID: 2800000, guid: 2c44b70487211cf40bbcbe7e376cef77, type: 3}
   white_noise_generator: {fileID: 7200000, guid: 0a27ec98d7fce6b4f8f66fc10aaeda48,
     type: 3}
+  colored: 0
 --- !u!4 &599619243
 Transform:
   m_ObjectHideFlags: 0

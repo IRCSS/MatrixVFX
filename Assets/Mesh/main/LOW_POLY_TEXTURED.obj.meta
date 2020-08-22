@@ -22,7 +22,67 @@ ModelImporter:
     2300000: default
     3300000: default
     4300000: default
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u1_v1
+    second: {fileID: 2100000, guid: 62c221e0331c7b64aa09cef89370b915, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u1_v2
+    second: {fileID: 2100000, guid: 356c5ac921c968d43a433e90a16de7a6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u1_v3
+    second: {fileID: 2100000, guid: 2fabc4432c19a23449343a1117b078f0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u2_v1
+    second: {fileID: 2100000, guid: 2378f056fe18b6c4d82077f2e8316dee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u2_v2
+    second: {fileID: 2100000, guid: 26e5a22828269d94db9ee5ff500cb414, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u2_v3
+    second: {fileID: 2100000, guid: 0df3f135cff43264daf092f839444104, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u3_v1
+    second: {fileID: 2100000, guid: 89dbaf35ed7970d4487cda34be1905d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u3_v2
+    second: {fileID: 2100000, guid: d6d0588a6f421e14782170a2dd9ed80c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u3_v3
+    second: {fileID: 2100000, guid: 4b63464195885e74fb153b1330a4e745, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u4_v1
+    second: {fileID: 2100000, guid: 5d27f84cb1cca5944a5d7f404d07e480, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u4_v2
+    second: {fileID: 2100000, guid: 1a54184629ccd7c4b8accf5ec81027b6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LOW_POLY_TEXTURED_u4_v3
+    second: {fileID: 2100000, guid: 9bf0393dcab0c1e41b82ac94adde1df3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

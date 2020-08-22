@@ -63,7 +63,7 @@
 
 			float3 rain(float2 fragCoord)
 			{
-				fragCoord.x = floor(fragCoord.x/ 16.);              // This is the exact replica of the calculation in text function for getting the cell ids. Here we want the id for the columns 
+				fragCoord.x  = floor(fragCoord.x/ 16.);             // This is the exact replica of the calculation in text function for getting the cell ids. Here we want the id for the columns 
 
 				float offset = sin (fragCoord.x*15.);               // Each drop of rain needs to start at a different point. The column id  plus a sin is used to generate a different offset for each columm
 				float speed  = cos (fragCoord.x*3.)*.15 + .35;      // Same as above, but for speed. Since we dont want the columns travelling up, we are adding the 0.7. Since the cos *0.3 goes between -0.3 and 0.3 the 0.7 ensures that the speed goes between 0.4 mad 1.0. This is also control parameters for min and max speed
@@ -74,12 +74,12 @@
 			}
 
 			//---------------------------------------------------------
-
+#define scale 0.6
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture
 				fixed4 col = float4(0.,0.,0.,1.);
-			       col.xyz = text(i.uv * float2(_screen_width, _screen_height)*0.6)*rain(i.uv * float2(_screen_width, _screen_height)*0.6);
+			       col.xyz = text(i.uv * float2(_screen_width, _screen_height)*scale)*rain(i.uv * float2(_screen_width, _screen_height)*scale);
 				return col;
 			}
 			ENDCG

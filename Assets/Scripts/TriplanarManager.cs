@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class ScreenSpaceMatrix : MonoBehaviour {
-
+public class TriplanarManager : MonoBehaviour {
     // _____________________________________________
     // Public
     public  Texture       font_texture;
     public  ComputeShader white_noise_generator;
     public  bool          colored;
-
     // _____________________________________________
     // Private 
     private Camera        cam;
-    private Material      mat;
     private CommandBuffer cb;
     private RenderTexture white_noise;
 
-	// Use this for initialization
-	void Start () {
-        cam = Camera.main;
+    // Use this for initialization
+    void Start () {
+		cam = Camera.main;
         if (!cam) Debug.LogError("Couldnt find the main camera, not such gameobject tagged as mainCamera");
 
         // -----------------------------------------
@@ -35,23 +32,10 @@ public class ScreenSpaceMatrix : MonoBehaviour {
         };
         white_noise.Create();
         white_noise_generator.SetTexture(0, "_white_noise",    white_noise);
-
-
-
         // -----------------------------------------
-
-        string shaderID = "Unlit/ScreenSpaceMatrixEffect";
-        if (colored) shaderID = "Unlit/ScreenSpaceMatrixEffectColored";
-
-        mat = new Material(Shader.Find(shaderID));
- 
-        if (!mat) Debug.LogError("Couldnt find the shader ScreenSpaceMatrixEffect");
-
-        mat.SetTexture("_font_texture",      font_texture);
-        mat.SetTexture("_white_noise",       white_noise);
-        mat.SetInt    ("_screen_width",      cam.pixelWidth);
-        mat.SetInt    ("_screen_height",     cam.pixelHeight);
-        mat.SetInt    ("_session_rand_seed", Random.Range(0, int.MaxValue));
+        Shader.SetGlobalTexture("global_font_texture", font_texture);
+        Shader.SetGlobalTexture("global_white_noise",  white_noise);
+        Shader.SetGlobalInt    ("_session_rand_seed",  Random.Range(0, int.MaxValue));     
         // -----------------------------------------
 
         cb = new CommandBuffer()
@@ -60,14 +44,14 @@ public class ScreenSpaceMatrix : MonoBehaviour {
         };
 
         cb.DispatchCompute(white_noise_generator, 0, 512 / 8, 512 / 8, 1);
-        cb.Blit(BuiltinRenderTextureType.None, BuiltinRenderTextureType.CameraTarget, mat);
-        //cb.Blit(white_noise, BuiltinRenderTextureType.CameraTarget);
         cam.AddCommandBuffer(CameraEvent.AfterEverything, cb);
-    } 
-	
-	// Update is called once per frame
-	void Update () {
-      white_noise_generator.SetInt("_session_rand_seed", Mathf.CeilToInt( Time.time *6.0f));
+    
+     }
+
+    // Update is called once per frame
+    void Update () {
+        white_noise_generator.SetInt("_session_rand_seed", Mathf.CeilToInt(Time.time * 6.0f));
+        Shader.SetGlobalInt         ("global_colored",     colored?1:0);
 
     }
 }
