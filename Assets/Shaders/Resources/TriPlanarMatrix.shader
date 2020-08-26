@@ -29,9 +29,10 @@
 			struct v2f
 			{
 				//float2 uv       : TEXCOORD0;
-				float4 vertex   : SV_POSITION;
-				float3 worldPos : TEXCOORD0;
-				float3 normal   : NORMAL;
+				float4 vertex    : SV_POSITION;
+				float3 worldPos  : TEXCOORD0;
+				float3 normal    : NORMAL;
+				float4 screenPos : TEXCOORD2;
 			};
 
 			sampler2D _MainTex;
@@ -40,10 +41,11 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex   = UnityObjectToClipPos(v.vertex);
-				//o.uv     = TRANSFORM_TEX(v.uv, _MainTex);
-				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
-				o.normal   = UnityObjectToWorldNormal(v.normal);
+				o.vertex    = UnityObjectToClipPos(v.vertex);
+				//o.uv      = TRANSFORM_TEX(v.uv, _MainTex);
+				o.worldPos  = mul(unity_ObjectToWorld, v.vertex);
+				o.normal    = UnityObjectToWorldNormal(v.normal);
+				o.screenPos = ComputeScreenPos(o.vertex);
 				return o;
 			}
 
@@ -110,7 +112,7 @@
 			}
 
 			//---------------------------------------------------------
-#define scale     0.3
+#define scale     0.2
 #define sharpness 5.
 			float3 MatrixEffect(float2 coord) {
 				float3      col = float3(0., 0., 0.);
@@ -118,16 +120,20 @@
 
 				if (global_colored == 1)
 					rain_col = rain_colored(coord * float2(dropLength, dropLength)*scale);
-				return text(coord * float2(dropLength, dropLength)*scale)*rain_col;
+				return                 text(coord * float2(dropLength, dropLength)*scale) *rain_col;
 			}
 
+			float     _Global_Transition_value;
+			float3    _Global_Effect_center;
+
+#include "Transition.cginc"
 			// -----------------------------------
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col      = float4(0.,0.,0.,1.);
-				float3 colFront = MatrixEffect(i.worldPos.xy);
-				float3 colSide  = MatrixEffect(i.worldPos.zy);
-				float3 colTop   = MatrixEffect(i.worldPos.xz);
+				float3 colFront = MatrixEffect(i.worldPos.xy + sin(i.worldPos.zz));
+				float3 colSide  = MatrixEffect(i.worldPos.zy + sin(i.worldPos.xx));
+				float3 colTop   = MatrixEffect(i.worldPos.xz + sin(i.worldPos.yy));
 
 				float3 blendWeight  = pow(normalize(abs(i.normal)), sharpness);
 				       blendWeight /= (blendWeight.x+ blendWeight.y+ blendWeight.z);
@@ -135,6 +141,13 @@
 						              colSide  * blendWeight.x + 
 						              colTop   * blendWeight.y;
 
+			    float distance_to_center = distance(i.worldPos.xyz, _Global_Effect_center.xyz);
+				float control_value      = saturate(_Global_Transition_value);
+				if (control_value * 60.0f < distance_to_center) col = col * 0.0f;
+
+				float2 screenPos = i.screenPos.xy / i.screenPos.w;
+				col *= split_from_midle(screenPos.x, _Global_Transition_value, 0.0f);
+				col = min(1.5,col);
 				return col;
 			}
 			ENDCG
