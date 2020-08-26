@@ -23,12 +23,15 @@
 			{
 				float4 vertex : POSITION;
 				float2 uv     : TEXCOORD0;
+				float3 normal : NORMAL;
 			};
 
 			struct v2f
 			{
-				float2 uv     : TEXCOORD0;
-				float4 vertex : SV_POSITION;
+				//float2 uv       : TEXCOORD0;
+				float4 vertex   : SV_POSITION;
+				float3 worldPos : TEXCOORD0;
+				float3 normal   : NORMAL;
 			};
 
 			sampler2D _MainTex;
@@ -37,8 +40,10 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv     = TRANSFORM_TEX(v.uv, _MainTex);
+				o.vertex   = UnityObjectToClipPos(v.vertex);
+				//o.uv     = TRANSFORM_TEX(v.uv, _MainTex);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+				o.normal   = UnityObjectToWorldNormal(v.normal);
 				return o;
 			}
 
@@ -105,16 +110,31 @@
 			}
 
 			//---------------------------------------------------------
-#define scale 4.6
+#define scale     0.3
+#define sharpness 5.
+			float3 MatrixEffect(float2 coord) {
+				float3      col = float3(0., 0., 0.);
+				float3 rain_col = rain(coord* float2(dropLength, dropLength)*scale);
+
+				if (global_colored == 1)
+					rain_col = rain_colored(coord * float2(dropLength, dropLength)*scale);
+				return text(coord * float2(dropLength, dropLength)*scale)*rain_col;
+			}
 
 			// -----------------------------------
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col      = float4(0.,0.,0.,1.);
-			    float3 rain_col = rain(i.uv * float2(dropLength, dropLength)*scale);
-				if(global_colored == 1)
-				       rain_col = rain_colored(i.uv * float2(dropLength, dropLength)*scale);
-				       col.xyz  = text(i.uv * float2(dropLength, dropLength)*scale)*rain_col;
+				float3 colFront = MatrixEffect(i.worldPos.xy);
+				float3 colSide  = MatrixEffect(i.worldPos.zy);
+				float3 colTop   = MatrixEffect(i.worldPos.xz);
+
+				float3 blendWeight  = pow(normalize(abs(i.normal)), sharpness);
+				       blendWeight /= (blendWeight.x+ blendWeight.y+ blendWeight.z);
+					   col.xyz      = colFront * blendWeight.z + 
+						              colSide  * blendWeight.x + 
+						              colTop   * blendWeight.y;
+
 				return col;
 			}
 			ENDCG
