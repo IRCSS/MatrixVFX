@@ -8,20 +8,20 @@
 
 uint triple32(uint x)
 {
-	x ^= x >> 17;
-	x *= 0xed5ad4bbU;
-	x ^= x >> 11;
-	x *= 0xac4c1b51U;
-	x ^= x >> 15;
-	x *= 0x31848babU;
-	x ^= x >> 14;
-	return x;
+     x ^= x >> 17;
+     x *= 0xed5ad4bbU;
+     x ^= x >> 11;
+     x *= 0xac4c1b51U;
+     x ^= x >> 15;
+     x *= 0x31848babU;
+     x ^= x >> 14;
+     return x;
 }
 
 float wang_rnd(uint seed)
 {
-	uint rndint = triple32(seed);
-	return ((float)rndint) / float(0xFFFFFFFF);                                                       // 0xFFFFFFFF is max unsigned integer in hexa decimal
+      uint rndint = triple32(seed);
+      return ((float)rndint) / float(0xFFFFFFFF);                                                       // 0xFFFFFFFF is max unsigned integer in hexa decimal
 }
 
 // Create a RenderTexture with enableRandomWrite flag and set it
@@ -35,9 +35,9 @@ uint                _session_rand_seed;
 void Generate_White_Noise(uint3 id : SV_DispatchThreadID)
 {
 
-	uint  pixel_unique_id     = id.x + id.y * image_dimension;
-	float rand_x              = rnd(pixel_unique_id, 1);
-	float rand_y              = rnd(pixel_unique_id, 861);
-	      _white_noise[id.xy] = float4(rand_x, rand_y, 0.0, 0.0);
+     uint  pixel_unique_id     = id.x + id.y * image_dimension;
+     float rand_x              = rnd(pixel_unique_id, 1);
+     float rand_y              = rnd(pixel_unique_id, 861);
+           _white_noise[id.xy] = float4(rand_x, rand_y, 0.0, 0.0);
 
 }
