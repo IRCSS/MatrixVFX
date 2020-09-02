@@ -12,6 +12,10 @@ The Mesh is from Global Digital Heritage and is licnesed under non commercial us
 
 ---
 ## Documentaion 
+This was made and tested on Unity *2018.2.14f1* on *Windows* using *D3D*. It might work on other platforms fine, or might be minor issues. If there are issues, let me know. 
+
+For downloading the project, the meshes are on Git LFS. Which has a very limted bandwidth, it can be that you wont be able to clone this fork, if my bandwidth quota has already been reached for this month (other people cloned and used it up), in that case just download the project as ZIP, since I wont be adding new stuff to this repo except bug fixes in the future. 
+
 Once you open the project, you can either open the Triplanar Scene or the ScreenSpace scene (under Assets/Scene).
 The screen space showcases the matrix effect on a 2D surfaces whereas the TriplanarScene shows the effect on a 3D scene. 
 
